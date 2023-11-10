@@ -38,3 +38,48 @@ let rresultB = sum(7, 16);
 let rresult = sum(rresultA, rresultA);
 console.log(rresult);*/
 
+const point = document.getElementById("point");
+const startButton = document.getElementById("startButton");
+const showtime = document.getElementById("showtime");
+
+let gameInterval;
+let gameIntervalSpeed = 500;
+let gamestert;
+
+startButton.onclick = () => {
+  startButton.style.display = "none";
+  moveElement(point, getRandomnumber(0, window.innerWidth - 55), getRandomnumber(0, window.innerHeight - 55));
+  setPointOnClick(point);
+  setgameInterval(point);
+  gamestert = performance.now();
+};
+
+const moveElement = (element, x, y) => {
+  element.style.top = y + "px";
+  element.style.left = x + "px";
+};
+
+const setPointOnClick = (element) => {
+  element.onclick = () => {
+    let gameEnd = performance.now();
+    let time = gameEnd - gamestert;
+    showtime.innerText = `Time: ${Math.floor(time)} ms`;
+    gamestert = gameEnd;
+    element.innerText++;
+    if(gameIntervalSpeed > 200){
+    gameIntervalSpeed -= 10;
+    setgameInterval(element);
+    }
+    moveElement(element, getRandomnumber(0, window.innerWidth - 55), getRandomnumber(0, window.innerHeight - 55));
+  };
+};
+
+const setgameInterval = (element) => {
+  clearInterval(gameInterval);
+  gameInterval = setInterval(() => {
+    moveElement(element, getRandomnumber(0, window.innerWidth - 55), getRandomnumber(0, window.innerHeight - 55));
+  }, gameIntervalSpeed);
+};
+
+const getRandomnumber = (minimum, maximum) =>
+  Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
